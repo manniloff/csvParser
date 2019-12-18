@@ -1,8 +1,8 @@
 package com.csvparser.controller;
 
+import com.csvparser.service.impl.CsvParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller("csv-controller")
 public class CsvController {
@@ -10,6 +10,8 @@ public class CsvController {
     @GetMapping(value = {"/", ""})
     public String hello(){
         System.out.println("Hello");
+        CsvParser csvParser = new CsvParser();
+        csvParser.csvFileParse();
         return "hello";
     }
 }

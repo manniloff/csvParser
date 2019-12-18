@@ -1,4 +1,7 @@
 package com.csvparser.repository;
 
-public class CsvRepository {
+import com.csvparser.model.Csv;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CsvRepository extends JpaRepository<Csv,Long> {
 }
