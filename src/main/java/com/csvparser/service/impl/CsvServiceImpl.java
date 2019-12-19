@@ -54,6 +54,11 @@ public class CsvServiceImpl implements CsvService {
     }
 
     @Override
+    public void createCsvList(List<Csv> csvList) {
+        csvRepository.saveAll(csvList);
+    }
+
+    @Override
     public long deleteById(long id) {
         Optional<Csv> csv = csvRepository.findById(id);
         if(csv.isPresent()){
@@ -61,4 +66,5 @@ public class CsvServiceImpl implements CsvService {
         }
         return csv.get().getId();
     }
+
 }

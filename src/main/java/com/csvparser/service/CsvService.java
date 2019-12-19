@@ -13,4 +13,6 @@ public interface CsvService {
     long createOrUpdate(Csv newCsv);
 
     long deleteById(long id);
+
+    void createCsvList(List<Csv> csvList);
 }

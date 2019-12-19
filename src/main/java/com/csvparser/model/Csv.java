@@ -2,10 +2,7 @@ package com.csvparser.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -23,9 +20,12 @@ public class Csv {
 
     private String d;
 
+    @Lob
     private String e;
 
     private String f;
+
+    private String g;
 
     private String h;
 
