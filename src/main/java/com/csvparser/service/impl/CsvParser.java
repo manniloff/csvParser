@@ -19,6 +19,11 @@ public class CsvParser {
 
     private int countG;
     private int countB;
+    private String filePath;
+
+    CsvParser(String filePath){
+        this.filePath = filePath;
+    }
 
     public List<Csv> parseCsv() {
 
@@ -56,8 +61,8 @@ public class CsvParser {
     }
 
     private List<String[]> readCsv() {
-        String fileName = "src/main/resources/csv/interview.csv";
-        Path myPath = Paths.get(fileName);
+        //String fileName = "src/main/resources/csv/interview.csv";
+        Path myPath = Paths.get(filePath);
         List<String[]> rows = null;
         CSVParser parser = new CSVParserBuilder().withSeparator(',').build();
 

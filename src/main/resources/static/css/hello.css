@@ -1,0 +1,23 @@
+
+
+body:before {
+    height: 50%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #128ff2;
+    content: "";
+    z-index: 0;
+}
+
+.cont {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+}
+
+a {
+    color: #000000;
+}
