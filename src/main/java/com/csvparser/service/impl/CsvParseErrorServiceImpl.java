@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class CsvParseError {
+public class CsvParseErrorServiceImpl {
 
     static public void logErrorCsvData(List<Object[]> errData){
         String fileName = "src/main/resources/csv/bad-data.csv";

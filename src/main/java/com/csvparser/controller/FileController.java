@@ -2,11 +2,10 @@ package com.csvparser.controller;
 
 import com.csvparser.payload.UploadFileResponse;
 import com.csvparser.service.CsvService;
-import com.csvparser.service.impl.FileStorageService;
+import com.csvparser.service.impl.FileStorageServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,14 +24,14 @@ import java.util.stream.Collectors;
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
-    private final FileStorageService fileStorageService;
+    private final FileStorageServiceImpl fileStorageServiceImpl;
     private final CsvService csvService;
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+        String fileName = fileStorageServiceImpl.storeFile(file);
 
-        csvService.createCsvList(fileStorageService.getCsvData());
+        csvService.createCsvList(fileStorageServiceImpl.getCsvData());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
@@ -54,7 +53,7 @@ public class FileController {
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
+        Resource resource = fileStorageServiceImpl.loadFileAsResource(fileName);
 
         // Try to determine file's content type
         String contentType = null;

@@ -19,13 +19,13 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Service
-public class FileStorageService {
+public class FileStorageServiceImpl {
 
     private final Path fileStorageLocation;
     private List<Csv> csvData;
 
     @Autowired
-    public FileStorageService(FileStorageProperties fileStorageProperties) {
+    public FileStorageServiceImpl(FileStorageProperties fileStorageProperties) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
         try {
@@ -49,7 +49,7 @@ public class FileStorageService {
 
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            CsvParser csvParser = new CsvParser(targetLocation.toString());
+            CsvParserServiceImpl csvParser = new CsvParserServiceImpl(targetLocation.toString());
             csvData = csvParser.parseCsv();
 
             return fileName;

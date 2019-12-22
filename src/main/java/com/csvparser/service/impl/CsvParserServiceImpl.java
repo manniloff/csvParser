@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CsvParser {
+public class CsvParserServiceImpl {
 
     private int countG;
     private int countB;
     private String filePath;
 
-    CsvParser(String filePath){
+    CsvParserServiceImpl(String filePath){
         this.filePath = filePath;
     }
 
@@ -56,7 +56,7 @@ public class CsvParser {
                 countB++;
             }
         }
-        CsvParseError.logErrorCsvData(errData);
+        CsvParseErrorServiceImpl.logErrorCsvData(errData);
         return data;
     }
 
