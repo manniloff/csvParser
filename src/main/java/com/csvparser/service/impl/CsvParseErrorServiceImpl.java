@@ -1,39 +1,32 @@
 package com.csvparser.service.impl;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 public class CsvParseErrorServiceImpl {
 
+    private static final Logger logger = LoggerFactory.getLogger(CsvParseErrorServiceImpl.class);
+    private static final Logger loggerCsvError = LoggerFactory.getLogger("csvError");
+
     static public void logErrorCsvData(List<Object[]> errData){
-        String fileName = "src/main/resources/csv/bad-data.csv";
-        try(FileWriter writer = new FileWriter(fileName, false))
-        {
+        final String[] errorInfo = {""};
             // запись всей строки
             errData.forEach(data -> {
                 try {
-                    for(int i= 0; i<data.length; i++){
-                        if(data.length -1 != i){
-                            writer.write(data[i].toString()+",");
-                        } else{
-                            writer.write(data[i].toString());
+                    for (int i = 0; i < data.length; i++) {
+                        if (data.length - 1 != i) {
+                            errorInfo[0] += (data[i].toString() + ",");
+                        } else {
+                            errorInfo[0] += (data[i].toString());
                         }
                     }
-                    // запись по символам
-                    writer.append('\n');
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    loggerCsvError.info(errorInfo[0]);
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
                 }
             });
-
-            writer.flush();
-        }
-        catch(IOException ex){
-
-            System.out.println(ex.getMessage());
-        }
     }
 }
 

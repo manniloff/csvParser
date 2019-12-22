@@ -4,12 +4,15 @@ import com.csvparser.exception.FileStorageException;
 import com.csvparser.exception.MyFileNotFoundException;
 import com.csvparser.model.Csv;
 import com.csvparser.property.FileStorageProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -21,6 +24,7 @@ import java.util.List;
 @Service
 public class FileStorageServiceImpl {
 
+    private static final Logger logger = LoggerFactory.getLogger(FileStorageServiceImpl.class);
     private final Path fileStorageLocation;
     private List<Csv> csvData;
 
@@ -31,6 +35,7 @@ public class FileStorageServiceImpl {
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (Exception ex) {
+            logger.error("Could not create the directory where the uploaded files will be stored.");
             throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
         }
     }
@@ -54,6 +59,7 @@ public class FileStorageServiceImpl {
 
             return fileName;
         } catch (IOException ex) {
+            logger.error("Could not store file " + fileName + ". Please try again!");
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
@@ -65,9 +71,11 @@ public class FileStorageServiceImpl {
             if(resource.exists()) {
                 return resource;
             } else {
+                logger.error("File not found " + fileName);
                 throw new MyFileNotFoundException("File not found " + fileName);
             }
         } catch (MalformedURLException ex) {
+            logger.error("File not found " + fileName);
             throw new MyFileNotFoundException("File not found " + fileName, ex);
         }
     }

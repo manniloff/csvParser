@@ -5,8 +5,11 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CsvParserServiceImpl {
+
+    private static final Logger logger = LoggerFactory.getLogger(CsvParserServiceImpl.class);
+    private static final Logger statisticLogger = LoggerFactory.getLogger("statistic");
 
     private int countG;
     private int countB;
@@ -33,6 +39,8 @@ public class CsvParserServiceImpl {
 
         countG = 0;
         countB = 0;
+
+        logger.debug("Parse data from CSV to CsvObject");
 
         for (String[] row : rows) {
             Object[] csvData = Arrays.stream(row).toArray();
@@ -56,12 +64,16 @@ public class CsvParserServiceImpl {
                 countB++;
             }
         }
+
+        statisticLogger.info("{} of records received",countG+countB);
+        statisticLogger.info("{} of records successful",countG);
+        statisticLogger.info("{} of records failed",countB);
+
         CsvParseErrorServiceImpl.logErrorCsvData(errData);
         return data;
     }
 
     private List<String[]> readCsv() {
-        //String fileName = "src/main/resources/csv/interview.csv";
         Path myPath = Paths.get(filePath);
         List<String[]> rows = null;
         CSVParser parser = new CSVParserBuilder().withSeparator(',').build();
@@ -72,6 +84,7 @@ public class CsvParserServiceImpl {
                      .build()) {
             rows = reader.readAll();
         } catch (IOException ex) {
+            logger.error(ex.getMessage());
             ex.printStackTrace();
         }
         return rows;

@@ -2,14 +2,14 @@ package com.csvparser.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller("csv-controller")
 @RequiredArgsConstructor
 public class CsvController {
 
-    @RequestMapping(value = {"/", ""})
+    @GetMapping(value = {"/", ""})
     public String uploadFile() {
         return "uploadFile.html";
     }

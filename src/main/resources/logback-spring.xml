@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <timestamp key="myTimestamp" timeReference="contextBirth" datePattern="yyyy_MM_dd"/>
+
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %-5p [%-35c{0}] ==> %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/csvparser.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %-5p [%-31c{1}] ==> %m%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_PATH}/archived/csvparser_%d{dd_MM_yyyy}.log
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="StatisticAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/statistic.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %-5p [%-31c{1}] ==> %m%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                logs/statistic_%d{dd_MM_yyyy}.log
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="CsvErrorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/bad-data.csv</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %-5p [%-31c{1}] ==> %m%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                logs/bad-data._%d{dd_MM_yyyy}.csv
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <springProfile name="dev">
+        <root level="info">
+            <appender-ref ref="ConsoleAppender" />
+            <appender-ref ref="FileAppender" />
+        </root>
+        <logger name="com.csvparser" level="debug"/>
+        <logger name="statistic" level="debug" additivity="false">
+            <appender-ref ref="ConsoleAppender" />
+            <appender-ref ref="StatisticAppender" />
+        </logger>
+        <logger name="csvError" level="debug" additivity="false">
+            <appender-ref ref="ConsoleAppender" />
+            <appender-ref ref="CsvErrorAppender" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="warn">
+            <appender-ref ref="FileAppender" />
+        </root>
+        <logger name="com.csvparser" level="info"/>
+        <logger name="statistic" level="debug" additivity="false">
+            <appender-ref ref="StatisticAppender" />
+        </logger>
+    </springProfile>
+
+</configuration>
